@@ -9,8 +9,9 @@ interface CountryProps {
 }
 
 function App() {
-  const [value, setValue] = useState<string>("");
-  const [countriesList, setCountriesList] = useState<string[]>([]);
+  const [countries, setCountries] = useState<string[]>([]);
+  const [filteredList, setFilteredList] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const getCountries = useCallback(async () => {
     const options = {
@@ -25,7 +26,7 @@ function App() {
         (country: CountryProps) => country.name.common
       );
 
-      setCountriesList(countryList);
+      setCountries(countryList);
     } catch (error) {
       console.error("Error getting countries", error);
     }
@@ -37,9 +38,16 @@ function App() {
 
   const handleChange = useCallback(
     (event: React.FormEvent<HTMLInputElement>) => {
-      console.log({ event });
+      const input = event.currentTarget.value;
+
+      const newList = countries.filter(
+        (country) => country.toLowerCase().indexOf(input.toLowerCase()) > -1
+      );
+
+      setFilteredList(newList);
+      setSearchQuery(input);
     },
-    []
+    [countries]
   );
 
   return (
@@ -52,8 +60,15 @@ function App() {
           name="search"
           type="search"
           onChange={handleChange}
-          value={value}
+          value={searchQuery}
         />
+        {filteredList.length && (
+          <ul className="autocomplete">
+            {filteredList.map((country, index) => {
+              return <li key={index}>{country}</li>;
+            })}
+          </ul>
+        )}
       </div>
     </div>
   );
