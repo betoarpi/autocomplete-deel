@@ -40,19 +40,32 @@ function App() {
     getCountries();
   }, [getCountries]);
 
+  const handleFilterCountries = useCallback(
+    (list: string[], input: string) =>
+      new Promise<string[]>((resolve) => {
+        const newList = list.filter(
+          (country) => country.toLowerCase().indexOf(input.toLowerCase()) > -1
+        );
+
+        setTimeout(() => {
+          resolve(newList);
+        }, 100);
+      }),
+    []
+  );
+
   const handleChange = useCallback(
-    (event: React.FormEvent<HTMLInputElement>) => {
+    async (event: React.FormEvent<HTMLInputElement>) => {
       const input = event.currentTarget.value;
 
-      const newList = countries.filter(
-        (country) => country.toLowerCase().indexOf(input.toLowerCase()) > -1
-      );
+      const newFilteredList = await handleFilterCountries(countries, input);
 
-      setFilteredList(newList);
+      setActive(0);
+      setFilteredList(newFilteredList);
       setShowAutocomplete(true);
       setSearchQuery(input);
     },
-    [countries]
+    [countries, handleFilterCountries]
   );
 
   const handleClick = useCallback((clickedItem: string) => {
