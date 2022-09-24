@@ -2,6 +2,8 @@ import "./App.css";
 
 import { useCallback, useEffect, useState } from "react";
 
+import Autocomplete from "./components/Autocomplete/Autocomplete";
+
 const BASE_URL = "https://restcountries.com/v3.1/all";
 
 interface CountryProps {
@@ -11,6 +13,7 @@ interface CountryProps {
 function App() {
   const [countries, setCountries] = useState<string[]>([]);
   const [filteredList, setFilteredList] = useState<string[]>([]);
+  const [showAutocomplete, setShowAutocomplete] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const getCountries = useCallback(async () => {
@@ -45,6 +48,7 @@ function App() {
       );
 
       setFilteredList(newList);
+      setShowAutocomplete(true);
       setSearchQuery(input);
     },
     [countries]
@@ -62,12 +66,8 @@ function App() {
           onChange={handleChange}
           value={searchQuery}
         />
-        {filteredList.length && (
-          <ul className="autocomplete">
-            {filteredList.map((country, index) => {
-              return <li key={index}>{country}</li>;
-            })}
-          </ul>
+        {showAutocomplete && searchQuery && (
+          <Autocomplete filteredList={filteredList} />
         )}
       </div>
     </div>

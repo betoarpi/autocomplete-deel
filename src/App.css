@@ -1,2 +1,15 @@
+h1 {
+    margin: 16px auto;
+    text-align: center;
+}
 
+input {
+    border: 1px solid rgb(219, 219, 219);
+    padding: 8px;
+    width: 100%;
+}
 
+.autocomplete-container {
+    margin: 0 auto;
+    width: 600px;
+}

@@ -1,0 +1,25 @@
+.autocomplete {
+    border: 1px solid #ccc;
+    border-top: none;
+    margin-top: 0;
+    overflow-y: auto;
+    padding-left: 0;
+    width: 100%;
+}
+.autocomplete li {
+    padding: 6px;
+}
+.autocomplete > .active,
+.autocomplete li:hover {
+    background-color: rgb(164, 249, 255);
+    cursor: pointer;
+    font-weight: bold;
+}
+.autocomplete li:not(:last-of-type) {
+    border-bottom: 1px solid #ccc;
+}
+
+.emptySearch {
+    color: #666;
+    padding: 6px;
+}
