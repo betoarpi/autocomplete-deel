@@ -9,7 +9,7 @@
 .autocomplete li {
     padding: 6px;
 }
-.autocomplete > .active,
+.active,
 .autocomplete li:hover {
     background-color: rgb(164, 249, 255);
     cursor: pointer;

@@ -11,6 +11,7 @@ interface CountryProps {
 }
 
 function App() {
+  const [active, setActive] = useState<number>(0);
   const [countries, setCountries] = useState<string[]>([]);
   const [filteredList, setFilteredList] = useState<string[]>([]);
   const [showAutocomplete, setShowAutocomplete] = useState<boolean>(false);
@@ -54,6 +55,36 @@ function App() {
     [countries]
   );
 
+  const handleClick = useCallback((clickedItem: string) => {
+    setActive(0);
+    setFilteredList([]);
+    setShowAutocomplete(false);
+    setSearchQuery(clickedItem);
+  }, []);
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      const { key } = event;
+
+      if (key === "ArrowUp") {
+        return active === 0 ? null : setActive(active - 1);
+      }
+
+      if (key === "ArrowDown") {
+        return active - 1 === filteredList.length
+          ? null
+          : setActive(active + 1);
+      }
+
+      if (key === "Enter") {
+        setActive(0);
+        setShowAutocomplete(false);
+        setSearchQuery(filteredList[active]);
+      }
+    },
+    [active, filteredList]
+  );
+
   return (
     <div className="App">
       <h1>Rob Arroyo's Autocomplete</h1>
@@ -64,10 +95,15 @@ function App() {
           name="search"
           type="search"
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           value={searchQuery}
         />
         {showAutocomplete && searchQuery && (
-          <Autocomplete filteredList={filteredList} />
+          <Autocomplete
+            active={active}
+            filteredList={filteredList}
+            onClick={handleClick}
+          />
         )}
       </div>
     </div>

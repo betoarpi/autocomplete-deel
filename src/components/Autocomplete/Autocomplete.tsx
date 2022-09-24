@@ -1,15 +1,39 @@
 import styles from "./Autocomplete.module.css";
+import { useCallback } from "react";
 
 interface AutocompleteProps {
+  active: number;
   filteredList: string[];
+  onClick: (clickedItem: string) => void;
 }
 
-function Autocomplete({ filteredList }: AutocompleteProps) {
+function Autocomplete({ active, filteredList, onClick }: AutocompleteProps) {
+  const handleClick = useCallback(
+    (event: React.MouseEvent) => {
+      onClick(event.currentTarget.innerHTML);
+    },
+    [onClick]
+  );
+
   if (filteredList.length) {
     return (
       <ul className={styles.autocomplete}>
         {filteredList.map((suggestedQuery, index) => {
-          return <li key={`${suggestedQuery}_${index}`}>{suggestedQuery}</li>;
+          let className;
+
+          if (index === active) {
+            className = styles.active;
+          }
+
+          return (
+            <li
+              className={className}
+              key={`${suggestedQuery}_${index}`}
+              onClick={handleClick}
+            >
+              {suggestedQuery}
+            </li>
+          );
         })}
       </ul>
     );
